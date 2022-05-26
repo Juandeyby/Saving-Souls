@@ -6,9 +6,17 @@ namespace Game.Code
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private float speed = 5.0f;
+        [SerializeField] private float speed = 10f;
+        [SerializeField] private float rotationSpeed = 180;
+        private CharacterController _controller;
         private Vector2 _direction;
-        
+        private Vector3 _rotation;
+
+        private void Awake()
+        {
+            _controller = GetComponent<CharacterController>();
+        }
+
         public void Move(InputAction.CallbackContext context)
         {
             _direction = context.ReadValue<Vector2>();
@@ -16,10 +24,17 @@ namespace Game.Code
 
         private void MovePlayer()
         {
-            transform.Translate( new Vector3(_direction.x, 0, _direction.y) * (speed * Time.deltaTime));
+            _rotation = new Vector3(0, _direction.x * rotationSpeed * Time.deltaTime, 0);
+            var move = new Vector3(0, 0, _direction.y * Time.deltaTime);
+            if (_direction.y < 0f)
+                move = Vector3.zero;
+            move = transform.TransformDirection(move);
+            move.y -= 2f * Time.deltaTime;
+            _controller.Move(move * speed);
+            transform.Rotate(_rotation);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             MovePlayer();
         }
