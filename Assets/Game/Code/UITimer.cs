@@ -33,7 +33,12 @@ namespace Game.Code
 
         private void SetText()
         {
-            timer.text = _currentTime.ToString("0:00");
+            timer.text = $"{_currentTime / 60}:" + (_currentTime % 60).ToString("00");
+        }
+
+        public int GetTime()
+        {
+            return _currentTime;
         }
     }
 }

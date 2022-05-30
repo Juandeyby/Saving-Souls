@@ -6,7 +6,7 @@ namespace Game.Code
 {
     public class RelicsMap : MonoBehaviour
     {
-        [SerializeField] private  TextAsset[] relicsBds;
+        [SerializeField] private TextAsset[] relicsBds;
         [SerializeField] private Transform relicsParent;
         [SerializeField] private RelicPiece[] relicPieces;
 
@@ -18,9 +18,9 @@ namespace Game.Code
             }
         }
 
-        public void StartMap()
+        public void StartMap(int currentLevel)
         {
-            CreateRelicOnMap(0);
+            CreateRelicOnMap(currentLevel);
         }
 
         private MapBd GetData(int level)
@@ -43,6 +43,11 @@ namespace Game.Code
         public bool IsCompletePieces(int current)
         {
             return current - 1 == relicPieces.Length;
+        }
+
+        public int GetLevels()
+        {
+            return relicsBds.Length;
         }
     }
 }

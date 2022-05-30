@@ -9,6 +9,7 @@ namespace Game.Code
         [SerializeField] private float speed = 10f;
         [SerializeField] private float rotationSpeed = 180;
         [SerializeField] private CharacterEvent characterEvent;
+        private bool _isPlayerControl;
         private CharacterController _controller;
         private Vector2 _direction;
         private Vector3 _rotation;
@@ -37,12 +38,32 @@ namespace Game.Code
 
         private void FixedUpdate()
         {
-            MovePlayer();
+            if (_isPlayerControl) MovePlayer();
         }
 
         public void UpPlayer()
         {
             characterEvent.ActivateUpAnimation();
+        }
+
+        public void IdlePlayer()
+        {
+            characterEvent.DeactivateUpAnimation();
+        }
+
+        public void ActivatePlayerControl()
+        {
+            _isPlayerControl = true;
+        }
+        
+        public void DeactivatePlayerControl()
+        {
+            _isPlayerControl = false;
+        }
+
+        public void ResetPlayer()
+        {
+            
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Game.Code
 
         public void StartData()
         {
+            ResetPieces();
             var relicsTotal = mainPieces.Count;
             _relics = new bool[relicsTotal];
             DeactivateTeleport();
@@ -37,12 +38,20 @@ namespace Game.Code
             mainPieces[pieceIndex - 1].EnabledPiece();
         }
 
+        private void ResetPieces()
+        {
+            foreach (RelicMainPiece piece in mainPieces)
+            {
+                piece.DisabledPiece();
+            }
+        }
+
         public void ActivateTeleport()
         {
             teleport.gameObject.SetActive(true);
         }
 
-        public void DeactivateTeleport()
+        private void DeactivateTeleport()
         {
             teleport.gameObject.SetActive(false);
         }

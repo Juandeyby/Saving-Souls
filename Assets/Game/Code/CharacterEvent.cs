@@ -15,13 +15,17 @@ namespace Game.Code
 
         public void TeleportCompleted()
         {
-            //Singleton.Instance.Score();
-            Debug.Log("CompleteLevel");
+            Singleton.Instance.ActivateLevelScore();
         }
 
         public void ActivateUpAnimation()
         {
             _animator.SetBool(Up, true);
+        }
+        
+        public void DeactivateUpAnimation()
+        {
+            _animator.SetBool(Up, false);
         }
     }
 }

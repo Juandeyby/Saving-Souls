@@ -1,4 +1,5 @@
 using System;
+using Game.Code.BD;
 using UnityEngine;
 
 namespace Game.Code
@@ -7,6 +8,7 @@ namespace Game.Code
     {
         public static Singleton Instance { get; private set; }
         [SerializeField] private RelicsMap relicsMap;
+        [SerializeField] private WallsMap wallsMap;
         [SerializeField] private RelicMain relicMap;
         [SerializeField] private PlayerController playerController;
         private AudioSource _audioSource;
@@ -38,22 +40,74 @@ namespace Game.Code
             }
         }
 
-        public void ResetCurrentPieces()
+        private void ResetCurrentPieces()
         {
             CurrentPiece = 1;
         }
 
         private void Start()
         {
+            StartLevel();
+        }
+
+        public void StartLevel()
+        {
+            var currentLevel = GetLevelData();
             relicMap.StartData();
+            ResetCurrentPieces();
             UISingleton.Instance.StarGame();
-            relicsMap.StartMap();
+            relicsMap.StartMap(currentLevel);
+            wallsMap.StartMap(currentLevel);
+            playerController.IdlePlayer();
+            playerController.ActivatePlayerControl();
+        }
+
+        public void NextLevel()
+        {
+            SetLevelData(GetLevelData() + 1);
+            StartLevel();
+            UISingleton.Instance.DeactivateScore();
+        }
+
+        public void AgainLevel()
+        {
+            SetLevelData(GetLevelData());
+            StartLevel();
+            UISingleton.Instance.DeactivateScore();
         }
 
         public void OnTeleport()
         {
+            playerController.DeactivatePlayerControl();
             UISingleton.Instance.LevelFinished();
             playerController.UpPlayer();
+        }
+
+        public void ActivateLevelScore()
+        {
+            UISingleton.Instance.ActivateScore();
+        }
+
+        private void SetLevelData(int currentLevel)
+        {
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+        }
+
+        public int GetLevelData()
+        {
+            return PlayerPrefs.GetInt("CurrentLevel");
+        }
+
+        public bool IsLastLevel()
+        {
+            return relicsMap.GetLevels() == GetLevelData() + 1;
+        }
+
+        public void ResetAll()
+        {
+            SetLevelData(0);
+            StartLevel();
+            UISingleton.Instance.DeactivateScore();
         }
     }
 }
