@@ -26,6 +26,12 @@ namespace Game.Code
         public void StarGame()
         {
             uiTimer.StartTimer();
+            uiObject.UpRelic(0);
+        }
+
+        public void LevelFinished()
+        {
+            uiTimer.StopTimer();
         }
     }
 }

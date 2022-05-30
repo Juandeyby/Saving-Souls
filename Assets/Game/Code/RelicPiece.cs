@@ -17,6 +17,8 @@ namespace Game.Code
 
         private void PickUpRelic()
         {
+            if (Singleton.Instance.CurrentPiece != pieceIndex) return;
+            Singleton.Instance.PickUpPiece();
             RelicMain.Instance.AddPiece(pieceIndex);
             UISingleton.Instance.UpRelic(pieceIndex);
             Sound();

@@ -8,6 +8,7 @@ namespace Game.Code
     {
         public static RelicMain Instance { get; private set; }
         [SerializeField] private List<RelicMainPiece> mainPieces;
+        [SerializeField] private GameObject teleport;
         private bool [] _relics;
 
         private void Awake()
@@ -22,17 +23,28 @@ namespace Game.Code
             }
         }
 
-        private void Start()
+        public void StartData()
         {
-            var relicsTotal = transform.childCount;
+            var relicsTotal = mainPieces.Count;
             _relics = new bool[relicsTotal];
+            DeactivateTeleport();
         }
 
         public void AddPiece(int pieceIndex)
         {
-            if (_relics[pieceIndex]) return;
-            _relics[pieceIndex] = true;
-            mainPieces[pieceIndex].EnabledPiece();
+            if (_relics[pieceIndex - 1]) return;
+            _relics[pieceIndex - 1] = true;
+            mainPieces[pieceIndex - 1].EnabledPiece();
+        }
+
+        public void ActivateTeleport()
+        {
+            teleport.gameObject.SetActive(true);
+        }
+
+        public void DeactivateTeleport()
+        {
+            teleport.gameObject.SetActive(false);
         }
     }
 }

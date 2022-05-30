@@ -6,15 +6,43 @@ namespace Game.Code
 {
     public class RelicsMap : MonoBehaviour
     {
-        public  TextAsset relicsBd;
-        
-        private void Start()
+        [SerializeField] private  TextAsset[] relicsBds;
+        [SerializeField] private Transform relicsParent;
+        [SerializeField] private RelicPiece[] relicPieces;
+
+        public void ResetMap()
         {
-            // var myObject = new MapBd();
-            // var json = JsonUtility.ToJson(myObject);
-            // Debug.Log(json);
-            var myObject = JsonUtility.FromJson<MapBd>(relicsBd.text);
-            Debug.Log(myObject);
+            foreach (Transform relic in relicsParent)
+            {
+                Destroy(relic.gameObject);
+            }
+        }
+
+        public void StartMap()
+        {
+            CreateRelicOnMap(0);
+        }
+
+        private MapBd GetData(int level)
+        {
+            var data = JsonUtility.FromJson<MapBd>(relicsBds[level].text);
+            return data;
+        }
+
+        private void CreateRelicOnMap(int level)
+        {
+            var data = GetData(level);
+            for (var i = 0; i < data.relicsX.Count; i++)
+            {
+                var position = new Vector3(data.relicsX[i], data.relicsY[i], data.relicsZ[i]);
+                var rotation = new Quaternion(0, 0, 0, 0);
+                var relic = Instantiate(relicPieces[i], position, rotation, relicsParent);
+            }
+        }
+
+        public bool IsCompletePieces(int current)
+        {
+            return current - 1 == relicPieces.Length;
         }
     }
 }
